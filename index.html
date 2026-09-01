@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ibn Sina (Avicenna) — A Life in Motion</title>
+<style>
+  :root {
+    --bg-deep: #24150d;
+    --bg-mid: #3d2b1f;
+    --bg-light: #5c4429;
+    --gold: #c9a24b;
+    --gold-soft: #b8945f;
+    --cream: #faf6ef;
+    --parchment: #efe7d6;
+    --text: #f3ece0;
+    --card-text: #2b2b2b;
+    --muted: #c9bca6;
+    --line: #b8945f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  .parallax-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .layer1 { background: url('https://images.unsplash.com/photo-1518709268805-4e9044af1953?w=1600') center/cover; }
+  .layer2 {
+    background: url('https://images.unsplash.com/photo-1477554190778-9566f6ea0f6d?w=1600') center/cover;
+    opacity: 0.35;
+  }
+  .layer3 {
+    background: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1600') center/cover;
+    opacity: 0.25;
+  }
+  @media (max-width: 768px) {
+    .parallax-bg { background-attachment: scroll; }
+  }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(36, 21, 13, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid var(--gold);
+  }
+  .logo {
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  section {
+    min-height: 100vh;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .section-num {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: bold;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .section-rule {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 1rem auto 2rem;
+  }
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--cream);
+    position: relative;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(36,21,13,0.9) 0%, rgba(61,43,31,0.85) 50%, rgba(92,68,41,0.8) 100%);
+    z-index: -1;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .hero-tagline {
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .hero-scroll .dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: bounce 1.5s infinite;
+  }
+  @keyframes bounce {
+    100%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+  /* Base card styles — semi-transparent white with subtle tint */
+  .card {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card h3 {
+    font-size: 1.5rem;
+    color: var(--bg-mid);
+    margin-bottom: 0.5rem;
+  }
+  .card .date {
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .card p,
+  .card .lead {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--card-text);
+    margin-bottom: 1rem;
+  }
+  .timeline {
+    position: relative;
+    margin: 3rem 0;
+    padding-left: 2rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--gold), var(--gold-soft));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -1.8rem;
+    top: 0.3rem;
+    width: 14px; height: 14px;
+    background: var(--gold);
+    border: 3px solid var(--cream);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--bg-mid);
+  }
+  .tl-year {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+  .tl-title {
+    font-size: 1.2rem;
+    color: var(--bg-mid);
+    margin-bottom: 0.3rem;
+  }
+  .tl-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--card-text);
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .quote {
+    border-left: 3px solid var(--gold);
+    padding: 1rem 0 1rem 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--bg-mid);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .quote.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .quote span {
+    display: block;
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--gold-soft);
+    margin-top: 0.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .work-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    padding: 1.2rem;
+    border-top: 3px solid var(--gold);
+    transition: transform 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .work-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .work-card:hover { transform: translateY(-5px); }
+  .work-card h4 { font-size: 1.1rem; color: var(--bg-mid); margin-bottom: 0.5rem; }
+  .work-card p { font-size: 0.9rem; line-height: 1.6; color: var(--card-text); margin-bottom: 1rem; }
+  .work-card .expand-btn {
+    display: none;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+  .work-card.expanded {
+    background: rgba(250, 246, 239, 0.95);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  }
+  .work-card.expanded .expand-btn { display: block; }
+  .work-card.expanded p { display: none; }
+  .work-card.expanded .extra { display: block; }
+  .work-card .extra { display: none; margin-top: 1rem; font-size: 0.85rem; color: var(--muted); }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 3rem 0;
+  }
+  .stat {
+    text-align: center;
+    padding: 2rem;
+    background: var(--parchment);
+    border-radius: 6px;
+  }
+  .stat .num {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--gold);
+  }
+  .stat .lbl {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.3rem;
+  }
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--line);
+    margin-top: 2rem;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    z-index: 99;
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card, .reveal, .tl-item, .quote, .back-to-top {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+    .hero-scroll .dot { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="parallax-bg layer1"></div>
+  <div class="parallax-bg layer2"></div>
+  <div class="parallax-bg layer3"></div>
+
+  <nav>
+    <div class="logo">Avicenna <span>| The Life</span></div>
+    <ul class="nav-links">
+      <li><a href="#early">Early Years</a></li>
+      <li><a href="#flight">The Flight</a></li>
+      <li><a href="#courts">Court Life</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#medical">Medicine</a></li>
+      <li><a href="#influence">Legacy</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero" style="background: linear-gradient(135deg, rgba(36,21,13,0.9) 0%, rgba(61,43,31,0.85) 50%, rgba(92,68,41,0.8) 100%);">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-sub">The Philosopher of Two Worlds</div>
+      <h1 class="hero-title">Ibn Sina<br><span style="color:var(--gold)">Avicenna</span></h1>
+      <p class="hero-tagline">"The Preeminent Master" — a life of philosophy, medicine, and the restless search for knowledge across empires.</p>
+    </div>
+    <div class="hero-scroll">
+      <span class="dot"></span>
+      Scroll to explore a life
+    </div>
+  </section>
+
+  <!-- Section 1: Early Years -->
+  <section id="early" style="background: #faf6ef;">
+    <div class="section-header">
+      <div class="section-num">I · Origins</div>
+      <h2 class="section-title">The Making of a Mind</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="card reveal">
+      <div class="date">c. 980 — Afshana, near Bukhara</div>
+      <h3>Born in the Samanid World</h3>
+      <p class="lead">Abū ʿAlī al-Ḥusayn ibn ʿAbd Allāh ibn Sīnā was born in the village of Afshana, near Bukhara, then the capital of the Samanid Empire — a Persianate dynasty ruling over parts of Central Asia and northeastern Iran.</p>
+      <p>His father served as governor of one of the estates of the Samanid ruler Nūḥ ibn Manṣūr. The family home was a meeting place for men of learning, and young Ibn Sina absorbed scholarship from an early age. By ten, he had memorized the Qurʾān and much of Arabic poetry.</p>
+    </div>
+    <div class="card reveal">
+      <div class="date">c. 990 — Bukhara</div>
+      <h3>Education at the Court Library</h3>
+      <p>His family moved to Bukhara, where he studied Hanafi jurisprudence, arithmetic, geometry, astronomy, logic, and philosophy. He mastered logic, natural philosophy, and medicine while still a teenager.</p>
+      <p>A decisive moment came when he cured the Samanid ruler Nūḥ ibn Manṣūr of a serious illness. As a reward, he was granted access to the royal library — a treasure house of Greek, Persian, and Arabic manuscripts that shaped his entire intellectual synthesis.</p>
+    </div>
+    <div class="card reveal">
+      <div class="date">c. 997–1000</div>
+      <h3>Mastery by Sixteen</h3>
+      <p>By his own account, he had mastered physics, mathematics, logic, and metaphysics before sixteen, and began practicing medicine. He wrote later that medicine was "no hard and thorny science" compared to mathematics and metaphysics.</p>
+    </div>
+    <div class="two-col">
+      <div class="card reveal">
+        <div class="date">c. 990s</div>
+        <h3>First Writings</h3>
+        <p>His earliest known work, the <em>Compendium on the Soul</em>, was dedicated to the Samanid ruler. At twenty-one, he composed <em>Philosophy for ʿArūḍī</em> — a comprehensive survey of all philosophy except mathematics.</p>
+      </div>
+      <div class="card reveal">
+        <div class="date">c. 1000</div>
+        <h3>The Library Opened</h3>
+        <p>Access to the Samanid royal library allowed him to study Aristotle, the Neoplatonists, and earlier Islamic thinkers in depth. This formed the basis of his later synthesis.</p>
+      </div>
+    </div>
+    <div class="quote reveal">
+      "The knowledge of anything, since all things have causes, is not acquired or complete unless its causes are known."
+      <span>Ibn Sina</span>
+    </div>
+  </section>
+
+  <!-- Section 2: The Flight -->
+  <section id="flight" style="background: #3d2b1f; color: #f3ece0;">
+    <div class="section-header">
+      <div class="section-num">II · The Turning Point</div>
+      <h2 class="section-title">A Life Set Adrift</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(61, 43, 31, 0.4);">
+      <div class="date">c. 1000–1002</div>
+      <h3>The Fall of the Samanids</h3>
+      <p class="lead">The Turkic Qarakhanids ended Samanid rule in 999. Around the same time, his father died. Without a patron or his father's support, Ibn Sina left Bukhara — "necessity led me to forsake Bukhara" — and entered a life of wandering.</p>
+      <p>He traveled through Gurganj (Khwarazm), Nishapur, and Gurgan, acting as physician and administrator by day while gathering students for philosophical discussion each evening. Despite chaos, he continued producing top-quality scholarship.</p>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(61, 43, 31, 0.4);">
+      <div class="date">c. 1012–1015</div>
+      <h3>Rayy, Hamadan, and the Canon</h3>
+      <p>He moved to Rayy near present-day Tehran, then to Hamadan, where he became court physician to the Buyid ruler Shams al-Dawla. He began work on the <em>Canon of Medicine</em> — his medical masterpiece — and met his lifelong disciple and scribe, al-Jūzjānī.</p>
+      <p>In Hamadan, he twice served as vizier. Politics was perilous: he was forced into hiding by his opponents and spent time as a political prisoner. After Shams al-Dawla's death in 1021, he sought new patronage.</p>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(61, 43, 31, 0.4);">
+      <div class="date">c. 1022–1025</div>
+      <h3>The Escape to Isfahan</h3>
+      <p>Imprisoned and fearing for his life, Ibn Sina fled Hamadan disguised as a Sufi ascetic, accompanied by his brother, a student, and two slaves. He reached Isfahan and was warmly welcomed by the Kakuyid ruler ʿAlāʾ al-Dawla.</p>
+      <p>His final years brought comparative peace. He served as chief physician and counselor, completed major works begun in Hamadan, and accompanied the ruler on military campaigns — during which many of his later writings were composed.</p>
+    </div>
+    <div class="quote reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(61, 43, 31, 0.4);">
+      "I prefer a short life with width to a narrow one with length."
+      <span>Ibn Sina</span>
+    </div>
+  </section>
+
+  <!-- Section 3: Court Life -->
+  <section id="courts" style="background: #4a2c5a; color: #f3ece0;">
+    <div class="section-header">
+      <div class="section-num">III · The Courts</div>
+      <h2 class="section-title">Patronage and Peril</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(74, 44, 90, 0.4);">
+      <h3>A Life Between Courts</h3>
+      <p>Ibn Sina's adult life unfolded across competing dynasties — each court a world of opportunity and danger. He moved from patron to patron, serving as physician, advisor, and sometimes vizier.</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">to c. 1000</div>
+          <div class="tl-title">Samanids — Bukhara</div>
+          <div class="tl-desc">Physician and scholar with access to the royal library.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">c. 1000–1012</div>
+          <div class="tl-title">Khwarazmshahs — Gurganj</div>
+          <div class="tl-desc">Court physician and learned companion.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">c. 1012–1022</div>
+          <div class="tl-title">Buyids — Rayy, Hamadan</div>
+          <div class="tl-desc">Physician, vizier, and political advisor; imprisoned.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">c. 1022–1037</div>
+          <div class="tl-title">Kakuyids — Isfahan</div>
+          <div class="tl-desc">Chief physician, counselor, and patron-supported author.</div>
+        </div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(74, 44, 90, 0.4);">
+        <h3>The Vizier</h3>
+        <p>As vizier to Shams al-Dawla in Hamadan, Ibn Sina combined medical practice with administrative and political responsibility. He reflected deeply on ethics, politics, and practical wisdom — themes woven into his practical philosophy.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(74, 44, 90, 0.4);">
+        <h3>The Companion</h3>
+        <p>Under ʿAlāʾ al-Dawla in Isfahan, he found his most stable patronage. He accompanied the ruler on campaigns, composed works in camp, and enjoyed the intellectual companionship of a court that valued learning.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Philosophy Deep Dive -->
+  <section id="philosophy" style="background: #2c3e50; color: #f3ece0;">
+    <div class="section-header">
+      <div class="section-num">IV · The System</div>
+      <h2 class="section-title">A Philosophy of Everything</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+      <p class="lead">Ibn Sina sought to integrate all aspects of science and religion into a grand metaphysical vision — explaining the formation of the universe, the problems of evil, prayer, providence, prophecy, miracles, and the ultimate destiny of humanity.</p>
+    </div>
+    <div class="works-grid">
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+        <h3>Essence &amp; Existence</h3>
+        <p>He distinguished <em>quiddity</em> (what a thing is) from <em>existence</em> (that it is). We can know what a thing is without knowing whether it exists. This distinction underlies his entire modal ontology.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+        <h3>The Necessary Existent</h3>
+        <p>His proof of God: the aggregate of all contingent things must itself have a cause that is not contingent — a Necessary Existent whose essence is identical to its existence. God is the only being that exists by necessity.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+        <h3>The Flying Man</h3>
+        <p>A thought experiment: a man created floating in air, deprived of all senses. He would still affirm "I exist" — proving the soul is immaterial and self‑aware independent of sensory experience. A precursor to Descartes' <em>Cogito</em>.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+        <h3>Active Intellect</h3>
+        <p>Following Aristotle and al‑Fārābī, he posited an Active Intellect that actualizes human thought. The human intellect is potential until illuminated by this celestial agent, which provides the forms we abstract from experience.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+        <h3>Science &amp; Religion</h3>
+        <p>He offered rational accounts of prophecy, miracles, and revelation within his metaphysical framework, arguing that philosophy and revealed religion are compatible — both lead to the same truth.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+        <h3>Logic as Instrument</h3>
+        <p>Logic was the foundation of his scientific method — the tool through which philosophy could systematically investigate reality. He reorganized the Aristotelian Organon into a science of second intentions.</p>
+      </div>
+    </div>
+    <div class="quote reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(44, 62, 80, 0.4);">
+      "The world is a stream of events, and the philosopher is the one who sees the necessity flowing through it."
+      <span>Ibn Sina</span>
+    </div>
+  </section>
+
+  <!-- Section 5: Works (with collapsible cards) -->
+  <section id="works" style="background: #5c4429; color: #f3ece0;">
+    <div class="section-header">
+      <div class="section-num">V · The Written World</div>
+      <h2 class="section-title">A Corpus of Genius</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+      <p class="lead">Ibn Sina wrote nearly 100 works — philosophical encyclopedias, medical treatises, and concise summaries. His writings shaped intellectual life for centuries across the Islamic, Byzantine, and Latin worlds.</p>
+    </div>
+    <div class="works-grid">
+      <div class="work-card reveal" onclick="this.classList.toggle('expanded')" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+        <h4>The Book of Healing (Kitāb al-Shifāʾ)</h4>
+        <p>A massive philosophical encyclopedia covering logic, physics, mathematics, and metaphysics — his magnum opus in philosophy.</p>
+        <p class="extra">Composed over many years, it systematically presents his entire philosophical system. The Latin translation of parts of it (the <em>Liber Sextus Naturalium</em>) influenced medieval scholasticism.</p>
+        <button class="expand-btn">Expand</button>
+      </div>
+      <div class="work-card reveal" onclick="this.classList.toggle('expanded')" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+        <h4>The Canon of Medicine (Al-Qānūn fī al-Ṭibb)</h4>
+        <p>His medical masterpiece. Translated to Latin in the 12th century, it became the standard textbook in European medical schools, consulted well into the 17th century.</p>
+        <p class="extra">Divided into five books: general principles, materia medica, diseases of organs, diseases of the whole body, and compound drugs. It described 760 drugs and introduced systematic clinical trials.</p>
+        <button class="expand-btn">Expand</button>
+      </div>
+      <div class="work-card reveal" onclick="this.classList.toggle('expanded')" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+        <h4>Philosophy for ʿArūḍī (GS 2)</h4>
+        <p>A comprehensive work on all philosophy, written at the request of a neighbor — an early statement of his systematic vision.</p>
+        <p class="extra">Covers logic, natural philosophy, mathematics, and metaphysics, but explicitly excludes mathematics (which he treated separately). It shows his ambition to present philosophy as an ordered whole.</p>
+        <button class="expand-btn">Expand</button>
+      </div>
+      <div class="work-card reveal" onclick="this.classList.toggle('expanded')" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+        <h4>The Available and the Valid (GS 10)</h4>
+        <p>Twenty-volume commentaries on the works of Aristotle — engaging directly with the philosopher who shaped his entire approach.</p>
+        <p class="extra">These commentaries, now largely lost, were a major vehicle for transmitting Aristotelian thought to the Islamic and later Latin worlds. They show Avicenna's critical method.</p>
+        <button class="expand-btn">Expand</button>
+      </div>
+      <div class="work-card reveal" onclick="this.classList.toggle('expanded')" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+        <h4>Piety and Sin (GPP 1)</h4>
+        <p>A two-volume work on the practical sciences — ethics applied to human conduct and society.</p>
+        <p class="extra">Explores the nature of the good, the classification of virtues, and the role of reason in moral life. Part of his broader practical philosophy alongside politics and household management.</p>
+        <button class="expand-btn">Expand</button>
+      </div>
+      <div class="work-card reveal" onclick="this.classList.toggle('expanded')" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(92, 68, 41, 0.4);">
+        <h4>The Book of Knowledge for ʿAlāʾ (Danishnama)</h4>
+        <p>A Persian summa of philosophy written for his Isfahani patron — a concise, accessible overview of his system.</p>
+        <p class="extra">Notable for creating new scientific vocabulary in Persian. Covers logic, metaphysics, music theory, and other sciences. It demonstrates his ability to communicate complex ideas to a broader audience.</p>
+        <button class="expand-btn">Expand</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Medical Innovations -->
+  <section id="medical" style="background: #e0f2f1; color: #2b2b2b;">
+    <div class="section-header">
+      <div class="section-num">VI · The Healer</div>
+      <h2 class="section-title">Medical Innovations</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+      <p class="lead">The <em>Canon of Medicine</em> was not merely a compilation — it introduced original contributions that shaped medicine for centuries. Here are some of his key discoveries and methods.</p>
+    </div>
+    <div class="works-grid">
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Contagious Diseases</h3>
+        <p>He recognized the contagious nature of tuberculosis (phthisis) and other infectious diseases, and described how diseases spread through water and soil.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Meningitis</h3>
+        <p>He provided the first known description of meningitis, distinguishing it from infectious brain disease and noting it could be caused by infection elsewhere in the body.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Pulse Diagnosis</h3>
+        <p>He refined Galen's pulse theory, correctly describing the pulse as alternating expansion and contraction. He pioneered wrist pulse examination and identified over 50 distinct pulse types.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Pharmacology</h3>
+        <p>He catalogued 760 drugs with detailed comments on their properties and effectiveness. He introduced systematic experimentation and quantification into pharmacology.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Clinical Trials</h3>
+        <p>He advocated testing new drugs on animals and humans before general use — a proto‑clinical trial method. He also described the healing properties of gaseous mercury and recommended ice for fevers.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Surgical Techniques</h3>
+        <p>He detailed procedures for intubation, tracheotomy, and bone setting. He designed catheters with rounded tips and side holes, and emphasized cleanliness before surgery.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Neuroscience</h3>
+        <p>He discovered the cerebellar vermis and the caudate nucleus. He linked intellectual dysfunction to the brain's middle ventricle and recognized the frontal lobe's role in reasoning.</p>
+      </div>
+      <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(224, 242, 241, 0.5);">
+        <h3>Psychosomatic Medicine</h3>
+        <p>He diagnosed "love sickness" by pulse changes and linked emotional states to physical health. He described melancholia, mania, epilepsy, and other neuropsychiatric conditions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Influence Timeline -->
+  <section id="influence" style="background: #8b6914; color: #f3ece0;">
+    <div class="section-header">
+      <div class="section-num">VII · The Echo</div>
+      <h2 class="section-title">A Life That Outlived Its Age</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num">~100</div><div class="lbl">Works Written</div></div>
+      <div class="stat"><div class="num">12th c.</div><div class="lbl">Latin Translations</div></div>
+      <div class="stat"><div class="num">17th c.</div><div class="lbl">Medical Standard</div></div>
+      <div class="stat"><div class="num">2nd</div><div class="lbl">Only to Aristotle</div></div>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(139, 105, 20, 0.4);">
+      <h3>The Islamic World</h3>
+      <p>Avicenna's system dominated intellectual life across the Islamic world, sparking reactions from enthusiastic acceptance to rigorous refutation. He was called <em>al-shaykh al-raʾīs</em> — "The Preeminent Master" — second only to Aristotle in influence.</p>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(139, 105, 20, 0.4);">
+      <h3>Medieval and Renaissance Europe</h3>
+      <p>Beginning in the 12th century, Latin translations of his philosophy profoundly influenced scholastic thought. His metaphysics and theory of the soul shaped the arguments of Thomas Aquinas, Duns Scotus, and many others.</p>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(139, 105, 20, 0.4);">
+      <h3>Medicine and Science</h3>
+      <p>The <em>Canon of Medicine</em> standardized medical terminology and classification, transmitted Galenic and Aristotelian medicine in a unified framework, and advanced pharmacology and clinical reasoning. He described 760 drugs and recognized the contagious nature of tuberculosis.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">12th c.</div>
+        <div class="tl-title">Latin Translation Begins</div>
+        <div class="tl-desc">Gerard of Cremona translates the <em>Canon</em> and other works into Latin in Toledo. Avicenna's philosophy enters European universities.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">13th–15th c.</div>
+        <div class="tl-title">Medical Textbook</div>
+        <div class="tl-desc">The <em>Canon</em> becomes the primary textbook in European medical schools, used alongside Hippocrates and Galen.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">16th–17th c.</div>
+        <div class="tl-title">Gradual Decline</div>
+        <div class="tl-desc">New anatomical discoveries (e.g., Harvey's circulation) begin to supersede some of his teachings, but the <em>Canon</em> is still consulted.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Today</div>
+        <div class="tl-title">Enduring Legacy</div>
+        <div class="tl-desc">Revered as the father of early modern medicine and a central figure in Islamic philosophy. His thought continues to be studied and debated.</div>
+      </div>
+    </div>
+    <div class="quote reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(139, 105, 20, 0.4);">
+      "Medicine is a science from which one learns the states of the human body with respect to what is healthy and what is not, in order to preserve health when it exists and restore it when it is lost."
+      <span>The Canon of Medicine</span>
+    </div>
+    <div class="card reveal" style="background: rgba(255, 255, 255, 0.75); border-color: rgba(139, 105, 20, 0.4);">
+      <h3>Death in Campaign</h3>
+      <p>Ibn Sina died in June 1037 in Hamadan, while accompanying ʿAlāʾ al-Dawla on a military campaign. He was approximately 57 years old. Despite applying his medical skills to himself, he succumbed to illness — reportedly chronic intestinal disease, possibly aggravated by over‑medication.</p>
+      <p>His autobiography, dictated to his student al‑Jūzjānī, remains our most extensive source on his life — a remarkable self‑portrait of a mind perpetually in motion.</p>
+    </div>
+    <footer color="black">
+      Ibn Sina (Avicenna) · c. 980–1037 · A life in motion<br>
+	  by Mu'izz Mohammed Khan
+    </footer>
+  </section>
+
+  <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    ↑
+  </button>
+
+  <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReducedMotion) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.card, .tl-item, .work-card, .quote, .back-to-top').forEach(el => observer.observe(el));
+    }
+
+    window.addEventListener('scroll', () => {
+      const btn = document.querySelector('.back-to-top');
+      if (window.scrollY > 300) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    });
+  </script>
+</body>
+</html>
